@@ -1,8 +1,12 @@
 import CityItem from "./CityItem";
 import styles from "./CityList.module.css";
 import Spinner from "./Spinner";
+import { useCities } from "../contexts/CitiesContext";
 
-function CityList({ cities, isLoading }) {
+function CityList() {
+  // getting the date from context
+  const { cities, isLoading } = useCities();
+
   if (isLoading) return <Spinner />;
 
   return (
