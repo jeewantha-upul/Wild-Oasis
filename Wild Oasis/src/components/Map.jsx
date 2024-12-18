@@ -1,16 +1,16 @@
 /* eslint-disable no-unused-vars */
 import styles from "./Map.module.css";
-import { useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { useCities } from "../contexts/CitiesContext";
-// import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 function Map() {
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  //const navigate = useNavigate();
 
-  // const lat = searchParams.get("lat");
-  // const lng = searchParams.get("lng");
+  const mapLat = searchParams.get("lat");
+  const mapLng = searchParams.get("lng");
 
   // const changeLat = () => {
   //   setSearchParams();
@@ -19,7 +19,13 @@ function Map() {
   // getting the cities from global state
   const { cities } = useCities();
 
+  // lat and lng when city item clicked
   const [mapPosition, setMapPosition] = useState([51.505, -0.09]);
+
+  useEffect(() => {
+    if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
+  }, [mapLat, mapLng]);
+
   return (
     <div className={styles.mapContainer}>
       <MapContainer
@@ -44,9 +50,20 @@ function Map() {
             </Popup>
           </Marker>
         ))}
+
+        {/* for showing the selected city */}
+        <ChangeCenter mapPosition={mapPosition} zoom={30} />
       </MapContainer>
     </div>
   );
 }
+
+{
+  /* for showing the selected city */
+}
+const ChangeCenter = ({ mapPosition, zoom }) => {
+  const map = useMap();
+  map.setView(mapPosition, zoom);
+};
 
 export default Map;
