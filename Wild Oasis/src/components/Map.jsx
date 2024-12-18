@@ -52,7 +52,7 @@ function Map() {
         ))}
 
         {/* for showing the selected city */}
-        <ChangeCenter mapPosition={mapPosition} zoom={30} />
+        <ChangeCenter mapPosition={mapPosition} zoom={50} />
       </MapContainer>
     </div>
   );
