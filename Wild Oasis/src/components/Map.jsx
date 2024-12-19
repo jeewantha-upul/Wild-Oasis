@@ -13,11 +13,12 @@ import { useCities } from "../contexts/CitiesContext";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useGeolocation } from "../hooks/useGeolocation";
 import Button from "./Button";
+import { useUrlPosition } from "../hooks/useUrlPosition";
 
 function Map() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const mapLat = searchParams.get("lat");
-  const mapLng = searchParams.get("lng");
+  // custom hook to get the positions from query string
+  const [mapLat, mapLng] = useUrlPosition();
+
   // getting the access tocustom hook which gets the currnet position of a user
   const {
     isLoading: isLoadingPosition,

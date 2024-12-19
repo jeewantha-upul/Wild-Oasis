@@ -42,8 +42,33 @@ function CitiesProvider({ children }) {
     }
   };
 
+  // posting a city to API
+  const createCity = async (newCity) => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${BASE_URL}/cities`, {
+        method: "POST",
+        body: JSON.stringify(newCity),
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      // eslint-disable-next-line no-unused-vars
+      const data = await response.json();
+
+      // a wildcard to show the added city in citylist
+      setCities((cities) => [...cities, newCity]);
+    } catch {
+      alert("There was an error loading data ...");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <CitiesContext.Provider value={{ cities, isLoading, currentCity, getCity }}>
+    <CitiesContext.Provider
+      value={{ cities, isLoading, currentCity, getCity, createCity }}
+    >
       {children}
     </CitiesContext.Provider>
   );

@@ -59,6 +59,42 @@
         "lng": 13.376933665713324
       },
       "id": 9844319796
+    },
+    {
+      "id": "4d20",
+      "cityName": "Tilmi",
+      "country": "Morocco",
+      "emoji": "🇲🇦",
+      "date": "2024-12-19T11:29:06.010Z",
+      "notes": "added the Tilmi city. cool place",
+      "position": {
+        "lat": "31.70947636001935",
+        "lng": "-5.756835937500001"
+      }
+    },
+    {
+      "id": "b905",
+      "cityName": "Tilmi",
+      "country": "Morocco",
+      "emoji": "🇲🇦",
+      "date": "2024-12-19T11:35:57.022Z",
+      "notes": "",
+      "position": {
+        "lat": "31.70947636001935",
+        "lng": "-5.756835937500001"
+      }
+    },
+    {
+      "id": "dbad",
+      "cityName": "London",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "emoji": "🇬🇧",
+      "date": "2024-12-19T11:36:39.851Z",
+      "notes": "",
+      "position": {
+        "lat": "51.503553686636266",
+        "lng": "-0.08188247680664064"
+      }
     }
   ]
 }
