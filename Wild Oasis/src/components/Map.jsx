@@ -74,7 +74,7 @@ function Map() {
         ))}
 
         {/* for showing the selected city in a Zoomed mode in Map*/}
-        <ChangeCenter mapPosition={mapPosition} zoom={50} />
+        <ChangeCenter mapPosition={mapPosition} />
         {/* for handling the click event on the map */}
         <DetectClick />
       </MapContainer>
