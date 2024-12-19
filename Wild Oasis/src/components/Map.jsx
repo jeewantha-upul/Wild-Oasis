@@ -1,33 +1,54 @@
 /* eslint-disable no-unused-vars */
 import styles from "./Map.module.css";
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import { useCities } from "../contexts/CitiesContext";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useGeolocation } from "../hooks/useGeolocation";
+import Button from "./Button";
 
 function Map() {
   const [searchParams, setSearchParams] = useSearchParams();
-  //const navigate = useNavigate();
-
   const mapLat = searchParams.get("lat");
   const mapLng = searchParams.get("lng");
-
-  // const changeLat = () => {
-  //   setSearchParams();
-  // };
+  // getting the access tocustom hook which gets the currnet position of a user
+  const {
+    isLoading: isLoadingPosition,
+    getPosition,
+    position: geoLocationPosition,
+  } = useGeolocation();
 
   // getting the cities from global state
   const { cities } = useCities();
 
-  // lat and lng when city item clicked
+  // local state where we provide for the Map to work
   const [mapPosition, setMapPosition] = useState([51.505, -0.09]);
 
+  // synching the query stringd with our components state
   useEffect(() => {
     if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
   }, [mapLat, mapLng]);
 
+  // synching the current users loction with our components state
+  useEffect(() => {
+    geoLocationPosition &&
+      setMapPosition([geoLocationPosition.lat, geoLocationPosition.lng]);
+  }, [geoLocationPosition]);
+
   return (
     <div className={styles.mapContainer}>
+      {!geoLocationPosition && (
+        <Button type="position" onClick={getPosition}>
+          {isLoadingPosition ? "Loading..." : "Get Your Position"}
+        </Button>
+      )}
       <MapContainer
         center={mapPosition}
         zoom={13}
@@ -51,8 +72,10 @@ function Map() {
           </Marker>
         ))}
 
-        {/* for showing the selected city */}
+        {/* for showing the selected city in a Zoomed mode in Map*/}
         <ChangeCenter mapPosition={mapPosition} zoom={50} />
+        {/* for handling the click event on the map */}
+        <DetectClick />
       </MapContainer>
     </div>
   );
@@ -64,6 +87,15 @@ function Map() {
 const ChangeCenter = ({ mapPosition, zoom }) => {
   const map = useMap();
   map.setView(mapPosition, zoom);
+};
+
+// navigation to form UI when clicked on the Map background
+const DetectClick = () => {
+  const navigate = useNavigate();
+  useMapEvents({
+    click: (e) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
+  });
+  return null;
 };
 
 export default Map;

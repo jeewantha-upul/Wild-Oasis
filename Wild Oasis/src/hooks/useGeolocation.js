@@ -25,5 +25,8 @@ export const useGeolocation = (defaultPosition = null) => {
     );
   }
 
+  position &&
+    console.log(`current location is ${position.lat} and  ${position.lng}`);
+
   return { isLoading, position, error, getPosition };
 };
