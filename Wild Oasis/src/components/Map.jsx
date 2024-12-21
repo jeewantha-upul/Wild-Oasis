@@ -16,9 +16,11 @@ import Button from "./Button";
 import { useUrlPosition } from "../hooks/useUrlPosition";
 
 function Map() {
-  // custom hook to get the positions from query string
-  const [mapLat, mapLng] = useUrlPosition();
+  // getting the cities from global state
+  const { cities } = useCities();
 
+  // local state where we provide for the Map to work
+  const [mapPosition, setMapPosition] = useState([51.505, -0.09]);
   // getting the access tocustom hook which gets the currnet position of a user
   const {
     isLoading: isLoadingPosition,
@@ -26,11 +28,8 @@ function Map() {
     position: geoLocationPosition,
   } = useGeolocation();
 
-  // getting the cities from global state
-  const { cities } = useCities();
-
-  // local state where we provide for the Map to work
-  const [mapPosition, setMapPosition] = useState([51.505, -0.09]);
+  // custom hook to get the positions from query string
+  const [mapLat, mapLng] = useUrlPosition();
 
   // synching the query stringd with our components state
   useEffect(() => {
@@ -39,7 +38,7 @@ function Map() {
 
   // synching the current users loction with our components state
   useEffect(() => {
-    geoLocationPosition &&
+    if (geoLocationPosition)
       setMapPosition([geoLocationPosition.lat, geoLocationPosition.lng]);
   }, [geoLocationPosition]);
 
@@ -52,7 +51,7 @@ function Map() {
       )}
       <MapContainer
         center={mapPosition}
-        zoom={13}
+        zoom={6}
         scrollWheelZoom={true}
         className={styles.map}
       >
@@ -61,17 +60,18 @@ function Map() {
           url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
 
-        {cities.map((city) => (
-          <Marker
-            position={[city.position.lat, city.position.lng]}
-            key={city.id}
-          >
-            <Popup>
-              <span>{city.emoji}</span>
-              <span>{city.cityName}</span>
-            </Popup>
-          </Marker>
-        ))}
+        {cities &&
+          cities.map((city) => (
+            <Marker
+              position={[city.position.lat, city.position.lng]}
+              key={city.id}
+            >
+              <Popup>
+                <span>{city.emoji}</span>
+                <span>{city.cityName}</span>
+              </Popup>
+            </Marker>
+          ))}
 
         {/* for showing the selected city in a Zoomed mode in Map*/}
         <ChangeCenter mapPosition={mapPosition} />
@@ -85,9 +85,10 @@ function Map() {
 {
   /* for showing the selected city */
 }
-const ChangeCenter = ({ mapPosition, zoom }) => {
+const ChangeCenter = ({ mapPosition }) => {
   const map = useMap();
-  map.setView(mapPosition, zoom);
+  map.setView(mapPosition);
+  return null;
 };
 
 // navigation to form UI when clicked on the Map background

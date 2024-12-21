@@ -32,12 +32,16 @@ const reducer = (state, action) => {
     case "city/added":
       return {
         ...state,
-        cities: (cities) => [...cities, action.payload],
+        isLoading: false,
+        cities: [...state.cities, action.payload],
+        currentCity: action.payload,
       };
     case "city/deleted":
       return {
         ...state,
-        cities: (cities) => cities.filter((city) => city.id !== action.payload),
+        isLoading: false,
+        cities: state.cities.filter((city) => city.id !== action.payload),
+        currentCity: {},
       };
     case "cities/loaded":
       return {
@@ -108,7 +112,7 @@ function CitiesProvider({ children }) {
       const data = await response.json();
 
       // a wildcard to show the added city in citylist
-      dispatch({ type: "city/added", payload: data });
+      dispatch({ type: "city/added", payload: newCity });
     } catch {
       dispatch({
         type: "error",
