@@ -9,20 +9,20 @@ function CountryList() {
 
   if (isLoading) return <Spinner />;
 
-  // getting the countries list from cities ( no duplicate countries )
-  // let countries = cities.reduce((countryArray, currCity) => {
-  //   if (!countryArray.map((c) => c.country).includes(currCity.country))
-  //     return [
-  //       ...countryArray,
-  //       { country: currCity.country, emoji: currCity.emoji, id: Date.now() },
-  //     ];
-  //   else return countryArray;
-  // }, []);
-
-  let countries = cities.reduce((arr, city) => {
-    if (arr.includes(city.country)) return arr;
-    else return [...arr, { id: Date.now(), country: city.country }];
+  //getting the countries list from cities ( no duplicate countries )
+  let countries = cities.reduce((countryArray, currCity) => {
+    if (!countryArray.map((c) => c.country).includes(currCity.country))
+      return [
+        ...countryArray,
+        { country: currCity.country, emoji: currCity.emoji, id: Date.now() },
+      ];
+    else return countryArray;
   }, []);
+
+  // let countries = cities.reduce((arr, city) => {
+  //   if (arr.includes(city.country)) return arr;
+  //   else return [...arr, { id: Date.now(), country: city.country }];
+  // }, []);
 
   return (
     <ul className={styles.countryList}>
